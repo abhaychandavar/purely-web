@@ -22,11 +22,11 @@ export const metadata: Metadata = {
 const poppins = localFont({
   src: [
     {
-      path: '../../public/fonts/poppins/Poppins-Regular.ttf',
+      path: './fonts/poppins/Poppins-Regular.ttf',
       weight: '400'
     },
     {
-      path: '../../public/fonts/poppins/Poppins-Bold.ttf',
+      path: './fonts/public/fonts/poppins/Poppins-Bold.ttf',
       weight: '700'
     }
   ],
