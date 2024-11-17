@@ -8,7 +8,7 @@ export default function Home() {
   const navigator = useRouter();
 
   useEffect(() => {
-   navigator.replace('/connect');
+   navigator.replace('/app/connect');
   }, []);
 
   return (
