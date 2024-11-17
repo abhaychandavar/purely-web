@@ -20,10 +20,6 @@ const OtpView = ({
   verificationId: string,
   goBack: () => void;
 }) => {
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [country, setCountry] = useState({ dialCode: '+91', countryCode: 'IN' });
-  const themeData = useTheme();
-
   const handleOTPComplete = async (otp: string) => {
     console.log('OTP Entered:', otp);
     const authCredential = PhoneAuthProvider.credential(verificationId, otp);
