@@ -5,15 +5,17 @@ import { useState } from 'react';
 const CircularSecondaryButton = ({
     subElement,
     className = '',
+    onClick = () => {}
 }: {
     subElement: React.ReactNode;
     className?: string;
+    onClick?: () => void;
 }) => {
     const [isPressed, setIsPressed] = useState(false);
 
     const handleClick = () => {
         setIsPressed(true);
-
+        onClick();
         // Reset the pressed state after the animation ends (300ms in this case)
         setTimeout(() => {
             setIsPressed(false);

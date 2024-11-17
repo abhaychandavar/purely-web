@@ -21,6 +21,7 @@ export default {
         overCard: "var(--over-card)",
         card: "var(--card)",
         highlight: "var(--highlight)",
+        danger: "var(--danger)",
       },
     },
   },

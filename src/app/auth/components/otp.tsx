@@ -13,14 +13,24 @@ import CircularSecondaryButton from '@/components/circularSecondaryButton';
 
 const auth = getAuth(FirebaseApp.getApp());
 
-const OtpView: React.FC = () => {
+const OtpView = ({
+  verificationId,
+  goBack
+}: {
+  verificationId: string,
+  goBack: () => void;
+}) => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [country, setCountry] = useState({ dialCode: '+91', countryCode: 'IN' });
   const themeData = useTheme();
 
-  const handleOTPComplete = (otp: string) => {
+  const handleOTPComplete = async (otp: string) => {
     console.log('OTP Entered:', otp);
-    // Here, you can trigger the verification of the OTP with Firebase or any other logic
+    const authCredential = PhoneAuthProvider.credential(verificationId, otp);
+    const userCredential = await signInWithCredential(auth, authCredential);
+    if (userCredential.user) {
+      
+    }
   };
 
   return (
@@ -42,7 +52,7 @@ const OtpView: React.FC = () => {
               height={80}
               className='opacity-50'
             />
-        } className='flex-[0.05]'/>
+        } className='flex-[0.05]' onClick={goBack}/>
         <PrimaryButton title='Get in!' className='text-[1rem] md:text-[1.5rem] flex-1' />
         </div>
 

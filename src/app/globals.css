@@ -17,6 +17,7 @@
   --card: #F2FAF9;
   --over-card: #000000;
   --highlight: #E7EFEE;
+  --danger: #FF1E1E;
 }
 
 @media (prefers-color-scheme: dark) {
