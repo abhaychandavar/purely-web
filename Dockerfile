@@ -8,9 +8,11 @@ RUN npm i --force
 
 COPY . .
 
-
-# Set environment variables
 ENV NEXT_PUBLIC_AUTH_SERVICE_URL=https://api-auth.purelyapp.me
+ENV NEXT_PUBLIC_APP_ENV=PROD
+ENV NEXT_PUBLIC_BASE_URL=https://purelyapp.me
+ENV NEXT_PUBLIC_AUTH_SERVICE_URL=https://api-auth.purelyapp.me
+ENV NEXT_PUBLIC_PROFILES_SERVICE_URL=https://api-profiles.purelyapp.me
 
 FROM base as production
 

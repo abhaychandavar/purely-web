@@ -2,7 +2,6 @@
 
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import Lottie from 'lottie-react';
-
 interface ScreenLoaderContextType {
   setLoading: (value: boolean) => void;
 }

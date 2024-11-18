@@ -1,17 +1,15 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { type Auth, PhoneAuthProvider, RecaptchaVerifier, signInWithCredential, signInWithCustomToken, signInWithPhoneNumber } from 'firebase/auth';
-import FirebaseApp from '@/utils/helpers/firebase/firebase';
-import Divider from '@/components/divider/divider';
+import { type Auth, getAuth, PhoneAuthProvider, signInWithCredential, signInWithCustomToken } from 'firebase/auth';
 import Image from 'next/image';
-import { useTheme } from 'next-themes';
-import CountryCodeSelectionModal from './countryCodeSelectionModal';
 import PrimaryButton from '@/components/primaryButton';// Assuming OTPInput is placed under /components
 import OTPInput from './otpInput';
 import CircularSecondaryButton from '@/components/circularSecondaryButton';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import { useFirebaseApp } from '@/components/providers/firebaseAppProvider';
+import appConfig from '@/config/config';
 
 const OtpView = ({
   verificationId,
@@ -22,25 +20,27 @@ const OtpView = ({
 }) => {
   const [auth, setAuth] = useState<Auth>();
   const navigator = useRouter();
-
+  const { app } = useFirebaseApp();
   useEffect(() => {
-    setAuth(auth);
+    if (!app) return;
+    const firebaseAuth = getAuth(app);
+    setAuth(firebaseAuth);
   }, []);
   const handleOTPComplete = async (otp: string) => {
     if (!auth) return;
-    console.log('OTP Entered:', otp);
     const authCredential = PhoneAuthProvider.credential(verificationId, otp);
     const userCredential = await signInWithCredential(auth, authCredential);
     if (!userCredential.user) {
       throw new Error('Could not authorize user');
     }
     const idToken = await userCredential.user.getIdToken();
+    console.log('idToken', idToken);
     await purelySignin(idToken);
   };
 
   const purelySignin = async (authToken: string) => {
     if (!auth) return;
-    const host = process.env.NEXT_PUBLIC_AUTH_SERVICE_URL || 'http://localhost:8080';
+    const host = appConfig.services.auth.baseUrl;
     const { data: tokenData } = await axios.get(`${host}/token`, {
       headers: {
         Authorization: `Bearer ${authToken}`

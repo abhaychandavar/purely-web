@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/components/providers/themeProvider";
+import { FirebaseAppProvider } from "@/components/providers/firebaseAppProvider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -42,12 +43,14 @@ export default function RootLayout({
     <html lang="en">
       <meta name="theme-color" content={'#00A98D'} />
       <ThemeProvider attribute="class"
-            defaultTheme="system">
-      <body
-        className={`${poppins.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body></ThemeProvider>
+        defaultTheme="system">
+        <FirebaseAppProvider>
+
+          <body
+            className={`${poppins.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}
+          >
+            {children}
+          </body></FirebaseAppProvider></ThemeProvider>
     </html>
   );
 }
