@@ -7,21 +7,27 @@ import { getAuth, signInWithPhoneNumber } from "firebase/auth";
 import FirebaseApp from "@/utils/helpers/firebase/firebase";
 import { useEffect, useState } from "react";
 import OtpView from "../components/otp";
-import { RecaptchaVerifier } from "firebase/auth";
+import { type Auth, RecaptchaVerifier } from "firebase/auth";
 import { ScreenLoaderProvider } from "@/components/providers/screenLoaderProvider";
-
-const auth = getAuth(FirebaseApp.getApp());
 
 const Auth = () => {
     const [verificationId, setVerificationfId] = useState<string | null>(null);
-    const handleAuth = async (phoneNumber: string) => {
-        const applicationVerifier = new RecaptchaVerifier(
-            auth,
+    const [applicationVerifier, setApplicationVerifier] = useState<RecaptchaVerifier>();
+    const [auth, setAuth] = useState<Auth>();
+    useEffect(() => {
+        const firebaseAuth = getAuth(FirebaseApp.getApp());
+        setAuth(firebaseAuth);
+        const firebaseApplicationVerifier = new RecaptchaVerifier(
+            firebaseAuth,
             'recaptcha',
             {
               size: 'invisible',
             },
           );
+        setApplicationVerifier(firebaseApplicationVerifier);
+    }, [])
+    const handleAuth = async (phoneNumber: string) => {
+        if (!auth) return;
         const result = await signInWithPhoneNumber(auth, phoneNumber, applicationVerifier);
         console.log('result', result);
         if (!result.verificationId) {

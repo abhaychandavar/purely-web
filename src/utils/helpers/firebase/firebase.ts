@@ -1,17 +1,17 @@
 // Import the functions you need from the SDKs you need
 import firebase from "firebase/compat/app";
 import firebaseConfig from "./config";
-import { Analytics, getAnalytics } from "firebase/analytics";
+import { getAnalytics } from "firebase/analytics";
 
 
 class FirebaseApp {
   private static app?: firebase.app.App;
-  private static analytics?: Analytics;
+  // private static analytics?: Analytics;
   static init = () => {
     const currApp = firebase.initializeApp(firebaseConfig);
     const analytics = getAnalytics(currApp);
     this.app = currApp;
-    this.analytics = analytics;
+    // this.analytics = analytics;
   }
 
   static getApp = (): firebase.app.App => {

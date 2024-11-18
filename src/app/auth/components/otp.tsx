@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { getAuth, PhoneAuthProvider, RecaptchaVerifier, signInWithCredential, signInWithCustomToken, signInWithPhoneNumber } from 'firebase/auth';
+import { type Auth, PhoneAuthProvider, RecaptchaVerifier, signInWithCredential, signInWithCustomToken, signInWithPhoneNumber } from 'firebase/auth';
 import FirebaseApp from '@/utils/helpers/firebase/firebase';
 import Divider from '@/components/divider/divider';
 import Image from 'next/image';
@@ -13,8 +13,6 @@ import CircularSecondaryButton from '@/components/circularSecondaryButton';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 
-const auth = getAuth(FirebaseApp.getApp());
-
 const OtpView = ({
   verificationId,
   goBack
@@ -22,9 +20,14 @@ const OtpView = ({
   verificationId: string,
   goBack: () => void;
 }) => {
+  const [auth, setAuth] = useState<Auth>();
   const navigator = useRouter();
 
+  useEffect(() => {
+    setAuth(auth);
+  }, []);
   const handleOTPComplete = async (otp: string) => {
+    if (!auth) return;
     console.log('OTP Entered:', otp);
     const authCredential = PhoneAuthProvider.credential(verificationId, otp);
     const userCredential = await signInWithCredential(auth, authCredential);
@@ -36,6 +39,7 @@ const OtpView = ({
   };
 
   const purelySignin = async (authToken: string) => {
+    if (!auth) return;
     const host = process.env.NEXT_PUBLIC_AUTH_SERVICE_URL || 'http://localhost:8080';
     const { data: tokenData } = await axios.get(`${host}/token`, {
       headers: {
