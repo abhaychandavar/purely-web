@@ -10,7 +10,7 @@ COPY . .
 
 
 # Set environment variables
-ENV NEXT_PUBLIC_AUTH_SERVICE_URL=https://auth.purelyapp.me
+ENV NEXT_PUBLIC_AUTH_SERVICE_URL=https://api-auth.purelyapp.me
 
 FROM base as production
 
