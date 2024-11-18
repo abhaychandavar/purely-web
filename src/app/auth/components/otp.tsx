@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { getAuth, PhoneAuthProvider, RecaptchaVerifier, signInWithCredential, signInWithPhoneNumber } from 'firebase/auth';
+import { getAuth, PhoneAuthProvider, RecaptchaVerifier, signInWithCredential, signInWithCustomToken, signInWithPhoneNumber } from 'firebase/auth';
 import FirebaseApp from '@/utils/helpers/firebase/firebase';
 import Divider from '@/components/divider/divider';
 import Image from 'next/image';
@@ -10,6 +10,8 @@ import CountryCodeSelectionModal from './countryCodeSelectionModal';
 import PrimaryButton from '@/components/primaryButton';// Assuming OTPInput is placed under /components
 import OTPInput from './otpInput';
 import CircularSecondaryButton from '@/components/circularSecondaryButton';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 const auth = getAuth(FirebaseApp.getApp());
 
@@ -20,14 +22,29 @@ const OtpView = ({
   verificationId: string,
   goBack: () => void;
 }) => {
+  const navigator = useRouter();
+
   const handleOTPComplete = async (otp: string) => {
     console.log('OTP Entered:', otp);
     const authCredential = PhoneAuthProvider.credential(verificationId, otp);
     const userCredential = await signInWithCredential(auth, authCredential);
-    if (userCredential.user) {
-      
+    if (!userCredential.user) {
+      throw new Error('Could not authorize user');
     }
+    const idToken = await userCredential.user.getIdToken();
+    await purelySignin(idToken);
   };
+
+  const purelySignin = async (authToken: string) => {
+    const host = process.env.NEXT_PUBLIC_AUTH_SERVICE_URL || 'http://localhost:8080';
+    const { data: tokenData } = await axios.get(`${host}/token`, {
+      headers: {
+        Authorization: `Bearer ${authToken}`
+      }
+    });
+    await signInWithCustomToken(auth, tokenData.data);
+    navigator.replace('/app/connect');
+  }
 
   return (
     <div className='w-full flex flex-col gap-5 p-5 md:w-1/3'>
