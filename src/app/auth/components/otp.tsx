@@ -21,11 +21,13 @@ const OtpView = ({
   const [auth, setAuth] = useState<Auth>();
   const navigator = useRouter();
   const { app } = useFirebaseApp();
+  
   useEffect(() => {
     if (!app) return;
     const firebaseAuth = getAuth(app);
     setAuth(firebaseAuth);
   }, []);
+
   const handleOTPComplete = async (otp: string) => {
     if (!auth) return;
     const authCredential = PhoneAuthProvider.credential(verificationId, otp);

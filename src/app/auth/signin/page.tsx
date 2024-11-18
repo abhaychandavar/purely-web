@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import OtpView from "../components/otp";
 import { type Auth, RecaptchaVerifier } from "firebase/auth";
 import { ScreenLoaderProvider } from "@/components/providers/screenLoaderProvider";
-import { FirebaseApp, getApp } from "firebase/app";
 import { useFirebaseApp } from "@/components/providers/firebaseAppProvider";
 
 const Auth = () => {
