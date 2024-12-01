@@ -45,12 +45,13 @@ export default function RootLayout({
       <ThemeProvider attribute="class"
         defaultTheme="system">
         <FirebaseAppProvider>
-
           <body
             className={`${poppins.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}
           >
             {children}
-          </body></FirebaseAppProvider></ThemeProvider>
+          </body>
+        </FirebaseAppProvider>
+      </ThemeProvider>
     </html>
   );
 }

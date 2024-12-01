@@ -20,13 +20,13 @@ const PhoneSignIn = ({
 }: {
   handleAuth: (phoneNumber: string) => Promise<void>;
 }) => {
-  const { setLoading } = useScreenLoader();
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm<Inputs>()
+  const [isLoading, setLoading] = useState(false);
   const [country, setCountry] = useState({ dialCode: '+91', countryCode: 'IN' });
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
@@ -94,7 +94,7 @@ const PhoneSignIn = ({
           
         </div>
         <div id="recaptcha" className="absolute"></div>
-        <PrimaryButton title='Continue' className='text-[1.5rem] min-w-full' />
+        <PrimaryButton title='Continue' className='text-[1.5rem] min-w-full' isLoading={isLoading} />
       </form>
     </div>
   );

@@ -37,14 +37,12 @@ const Auth = () => {
         setVerificationfId(result.verificationId);
     }
     return (
-        <ScreenLoaderProvider>
             <main className="h-screen flex flex-col items-center">
                 <TopBar />
                 <div className="w-[90%] md:w-full h-full flex justify-center items-center">
-                        {verificationId ? <OtpView goBack={() => setVerificationfId(null)} verificationId={verificationId} /> : <PhoneSignIn handleAuth={handleAuth}/>}
+                        {verificationId ? <OtpView goBack={() => setVerificationfId(null)} verificationId={verificationId} /> : <PhoneSignIn handleAuth={handleAuth} />}
                 </div>
             </main>
-        </ScreenLoaderProvider>
     )
 }
 

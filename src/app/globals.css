@@ -9,7 +9,9 @@
   --foreground: #171717;
   --primary: #00A98D;
   --secondary: #00a98d48;
+  --tertiary: #00a98d26;
   --over-background-outline: #CCCCCC;
+  --over-background-outline-primary: #00A98D;
   --over-background: #000000;
   --over-background-secondary: #666666;
   --over-background-divider: #E5E5E5;

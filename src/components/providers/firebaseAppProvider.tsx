@@ -3,6 +3,8 @@
 import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import firebaseConfig from '@/utils/helpers/firebase/config';
 import { FirebaseApp, initializeApp } from 'firebase/app';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { usePathname, useRouter } from 'next/navigation';
 
 interface FirebaseAppProviderContextType {
   app: FirebaseApp | undefined;
@@ -16,10 +18,33 @@ interface FirebaseAppProviderContext {
 
 export const FirebaseAppProvider: React.FC<FirebaseAppProviderContext> = ({ children }) => {
   const [app, setApp] = useState<FirebaseApp>();
+  const navigator = useRouter();
+  const usePath = usePathname();
+
   useEffect(() => {
     const firebaseApp = initializeApp(firebaseConfig);
     setApp(firebaseApp);
+
+    const auth = getAuth(app);
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      const token = await user?.getIdToken();
+      console.log('USER ACCESS TOKEN', token);
+      if (user && usePath !== '/auth/signin') {
+        navigator.replace('/app/connect');
+      } else {
+        navigator.replace('/auth/signin');
+      }
+    });
+  
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    if (!app) return;
+    
+    
+  }, [app, navigator]);
   
   return (
     <FirebaseAppProviderContext.Provider value={{app}}>

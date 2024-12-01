@@ -5,7 +5,7 @@ import { useState } from 'react';
 const CircularSecondaryButton = ({
     subElement,
     className = '',
-    onClick = () => {}
+    onClick = () => { }
 }: {
     subElement: React.ReactNode;
     className?: string;
@@ -25,12 +25,13 @@ const CircularSecondaryButton = ({
     return (
         <div
             onClick={handleClick}
-            className={`flex aspect-square justify-center items-center bg-secondary rounded-full p-2 md:p-5 text-overBackground cursor-pointer transition-all transform ${
-                isPressed ? 'scale-95' : 'scale-100'
-            } ${className}`}
+            className={`flex aspect-square justify-center items-center bg-secondary rounded-full text-overBackground cursor-pointer transition-all transform ${isPressed ? 'scale-95' : 'scale-100'
+                } ${className}`}
+            style={{ padding: '0.5rem' }}
         >
             {subElement}
         </div>
+
     );
 };
 

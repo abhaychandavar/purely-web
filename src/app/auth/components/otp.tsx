@@ -21,7 +21,7 @@ const OtpView = ({
   const [auth, setAuth] = useState<Auth>();
   const navigator = useRouter();
   const { app } = useFirebaseApp();
-  
+
   useEffect(() => {
     if (!app) return;
     const firebaseAuth = getAuth(app);
@@ -36,7 +36,6 @@ const OtpView = ({
       throw new Error('Could not authorize user');
     }
     const idToken = await userCredential.user.getIdToken();
-    console.log('idToken', idToken);
     await purelySignin(idToken);
   };
 
@@ -48,7 +47,11 @@ const OtpView = ({
         Authorization: `Bearer ${authToken}`
       }
     });
-    await signInWithCustomToken(auth, tokenData.data);
+    const userCredential = await signInWithCustomToken(auth, tokenData.data);
+    if (!userCredential.user) {
+      throw new Error('Could not authorize user');
+    }
+    console.log('User data', userCredential.user);
     navigator.replace('/app/connect');
   }
 
@@ -67,11 +70,11 @@ const OtpView = ({
             <Image
               src='/icons/backArrow.svg'
               alt='Back'
-              width={80}
-              height={80}
+              width={40}
+              height={40}
               className='opacity-50'
             />
-        } className='flex-[0.05]' onClick={goBack}/>
+        } onClick={goBack}/>
         <PrimaryButton title='Get in!' className='text-[1rem] md:text-[1.5rem] flex-1' />
         </div>
 
