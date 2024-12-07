@@ -1,6 +1,7 @@
 'use client';
 
 import ErrorMessage from "@/components/error/errorText";
+import Modal from "@/components/modal";
 import { useState } from "react";
 
 const SearchableSelect = ({
@@ -18,6 +19,7 @@ const SearchableSelect = ({
     defaultId?: string;
     onChange: (id: string) => void | Promise<void>;
 }) => {
+    const [isOpen, setIsOpen] = useState<boolean>(false);
     const handleSelect = async (option?: Record<string, any>) => {
         if (!option || option?.secondary) return;
         const { id } = option
@@ -37,11 +39,55 @@ const SearchableSelect = ({
                                 value: 'more',
                                 secondary: true
                             }].map((option) => {
+                                if ( option?.secondary) {
+                                    return (<Modal
+                                        triggerElement={
+                                            <div 
+                                                onClick={() => handleSelect(option)}
+                                                id={option?.id} 
+                                                className={`p-5 flex justify-center items-center hover:bg-primary cursor-pointer rounded-full pr-10 pl-10 bg-tertiary`}
+                                                >
+                                                {
+                                                    option?.label
+                                                }
+                                            </div>
+                                        }
+                                        body={
+                                            <div className="overflow-y-scroll max-h-[60%]">
+                                                {
+                                                    options.map((option) => {
+                                                        return (
+                                                            <div onClick={() => {
+                                                                handleSelect(option);
+                                                                setIsOpen(false);
+                                                            }}
+                                                                className={
+                                                                    `flex flex-row gap-5 p-5 cursor-pointer transition-all border-b-2 border-overBackgroundOutline hover:bg-highlight ${defaultId === option?.id ? 'bg-primary' : 'bg-transparent'}`
+                                                                }
+                                                            >
+                                                                {
+                                                                    option.label
+                                                                }
+                                                            </div>
+                                                        );
+                                                    })
+                                                }
+                                            </div>
+                                        }
+                                        title={title}
+                                        modalControls={false}
+                                        open={isOpen}
+                                        onClose={() => setIsOpen(false)}
+                                    >
+
+                                    </Modal>)
+                                }
                                 return (
                                     <div 
                                         onClick={() => handleSelect(option)}
                                         id={option?.id} 
-                                        className={`p-5 flex justify-center items-center hover:bg-primary cursor-pointer rounded-full pr-10 pl-10 ${defaultId === option?.id ? 'bg-primary' : option?.secondary ? 'bg-tertiary' : 'bg-secondary'}`}>
+                                        className={`p-5 flex justify-center items-center hover:bg-primary cursor-pointer rounded-full pr-10 pl-10 ${defaultId === option?.id ? 'bg-primary' : option?.secondary ? 'bg-tertiary' : 'bg-secondary'}`}
+                                        >
                                         {
                                             option?.label
                                         }
