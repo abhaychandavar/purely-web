@@ -8,6 +8,11 @@ const appConfig = {
         profiles: {
             baseUrl: process.env.NEXT_PUBLIC_PROFILES_SERVICE_URL || 'http://localhost:8081',
         }
+    },
+    google: {
+        maps: {
+            apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || '',
+        },
     }
 }
 
