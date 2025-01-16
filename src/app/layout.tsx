@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { ThemeProvider } from "@/components/providers/themeProvider";
+import ThemeProvider from "@/components/providers/themeProvider";
 import { FirebaseAppProvider } from "@/components/providers/firebaseAppProvider";
 
 const geistSans = localFont({
@@ -40,18 +40,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <meta name="theme-color" content={'#00A98D'} />
-      <ThemeProvider attribute="class"
-        defaultTheme="system">
-        <FirebaseAppProvider>
-          <body
-            className={`${poppins.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}
-          >
-            {children}
-          </body>
-        </FirebaseAppProvider>
-      </ThemeProvider>
+      <FirebaseAppProvider>
+        <body
+          className={`${poppins.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          <ThemeProvider attribute="class"
+            defaultTheme="system">
+            {children}</ThemeProvider>
+        </body>
+      </FirebaseAppProvider>
     </html>
   );
 }

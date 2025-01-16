@@ -15,7 +15,8 @@ import DistanceStepper from "@/components/distanceStepperSlider";
 const UpsertProfile = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [profile, setProfile] = useState<Record<string, any>>({});
-    const [name, setName] = useState(profile["name"] ? profile["name"] : undefined);
+    const [name, setName] = useState((profile["name"] || '').length ? profile["name"] : undefined);
+
     const [prompts, setPrompts] = useState<Array<{
         id: string,
         label: string,
@@ -72,7 +73,7 @@ const UpsertProfile = () => {
             });
         }
         catch (error) {
-            console.error("Error creating profile:", error);
+            console.log("Error creating profile:", error);
         }
     }
 
@@ -80,7 +81,7 @@ const UpsertProfile = () => {
     useEffect(() => {
         console.log('Current profile data', profile);
         upsertProfile();
-        setName(profile["name"] || null);
+        setName(profile["name"] || undefined);
     }, [profile]);
 
     return (
@@ -149,7 +150,7 @@ const UpsertProfile = () => {
                         <label htmlFor="bio">
                             Bio
                         </label>
-                        <textarea placeholder={profile?.['bio'] || 'test1'} name="bio" id="bio" className=" placeholder:text-white p-5 w-full outline-none resize-none border-2 border-overBackgroundOutline rounded-lg"  
+                        <textarea placeholder={profile?.['bio'] || 'You can express yourself here'} value = {profile?.['bio'] || undefined} name="bio" id="bio" className=" placeholder:text-gray-500 p-5 w-full outline-none resize-none border-2 border-overBackgroundOutline rounded-lg text-overBackground"  
                        onChange={(e) => debouncedSetProfile('bio', e.target.value)} />
                     </div>
                     <div className="w-full flex flex-col gap-5">
@@ -165,7 +166,6 @@ const UpsertProfile = () => {
                                         !selectedPromptIds.includes(p?.id) || 
                                         selectedPrompt.id === p?.id
                                 );
-                                console.log('selectedPrompt.id', selectedPrompt.id)
                                 return (
                                     <PromptCard
                                         key={`prompt-${index}`}
@@ -178,10 +178,9 @@ const UpsertProfile = () => {
                                             setProfile((prevProfile) => {
                                                 const updatedPrompts = [...(prevProfile.prompts || [])];
 
-                                                // Ensure the selected prompt updates only its position
                                                 updatedPrompts[index] = {
                                                     ...(prompts.find((p) => p?.id === promptId) || {}),
-                                                    answer: updatedPrompts[index]?.answer || '', // Preserve current answer if it exists
+                                                    answer: updatedPrompts[index]?.answer || '',
                                                 };
 
                                                 return { ...prevProfile, prompts: updatedPrompts };
@@ -190,7 +189,7 @@ const UpsertProfile = () => {
                                         setPromptAnswer={(answer: string, promptId: string) => {
                                             setProfile((prevProfile) => {
                                                 const updatedPrompts = [...(prevProfile.prompts || [])];
-                                                // Update the answer for the specific prompt
+
                                                 updatedPrompts[index] = {
                                                     ...(prompts.find((p) => p?.id === promptId) || {}),
                                                     answer,

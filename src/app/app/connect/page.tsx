@@ -15,7 +15,7 @@ const Connect = () => {
     return (
         <main className="flex flex-row gap-0">
             {
-                profiles.map((profile) => <div key={profile.id}>{JSON.stringify(profile)}</div>)
+                profiles?.map((profile) => <div key={profile.id}>{JSON.stringify(profile)}</div>) || <></>
             }
         </main>
     );

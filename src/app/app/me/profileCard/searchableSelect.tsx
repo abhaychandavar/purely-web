@@ -26,7 +26,7 @@ const SearchableSelect = ({
         await onChange(id);
     }
     return (
-        <div className='flex flex-col gap-5 w-full' id={id}>
+        <div className='flex flex-col gap-5 w-full' id={id} key={id}>
                 <label className="block font-medium">
                     {title}
                 </label>
@@ -38,9 +38,10 @@ const SearchableSelect = ({
                                 label: 'More',
                                 value: 'more',
                                 secondary: true
-                            }].map((option) => {
+                            }].map((option, idx) => {
                                 if ( option?.secondary) {
                                     return (<Modal
+                                        key={idx + 'default-label'}
                                         triggerElement={
                                             <div 
                                                 onClick={() => handleSelect(option)}
@@ -55,9 +56,9 @@ const SearchableSelect = ({
                                         body={
                                             <div className="overflow-y-scroll max-h-[60%]">
                                                 {
-                                                    options.map((option) => {
+                                                    options.map((option, idx) => {
                                                         return (
-                                                            <div onClick={() => {
+                                                            <div key={idx + 'non-default-label'} onClick={() => {
                                                                 handleSelect(option);
                                                                 setIsOpen(false);
                                                             }}
@@ -86,6 +87,7 @@ const SearchableSelect = ({
                                     <div 
                                         onClick={() => handleSelect(option)}
                                         id={option?.id} 
+                                        key={idx + 'primary-elements'}
                                         className={`p-5 flex justify-center items-center hover:bg-primary cursor-pointer rounded-full pr-10 pl-10 ${defaultId === option?.id ? 'bg-primary' : option?.secondary ? 'bg-tertiary' : 'bg-secondary'}`}
                                         >
                                         {
@@ -95,9 +97,9 @@ const SearchableSelect = ({
                                 );
                             })
                             :
-                            options?.map((option) => {
+                            options?.map((option, idx) => {
                                 return (
-                                    <div id={option.id} className={`p-5 flex justify-center items-center bg-secondary hover:bg-primary ${option?.secondary ? 'bg-tertiary' : 'bg-secondary'}`}>
+                                    <div key={idx + "opt-list"} id={option.id} className={`p-5 flex justify-center items-center bg-secondary hover:bg-primary ${option?.secondary ? 'bg-tertiary' : 'bg-secondary'}`}>
                                         {
                                             option.label
                                         }

@@ -10,7 +10,7 @@ const Modal = ({
     onClose,
     open,
     modalControls = true,
-    onOpen,
+    onOpen
 }: {
     triggerElement: React.ReactNode;
     title: string;

@@ -10,7 +10,7 @@ class profileService {
             return profile.data;
         }
         catch (error: any) {
-            console.error('Error fetching profile', error);
+            console.log('Error fetching profile', error);
             const { code } = error?.response?.data;
             if (code === 'purely/profiles/requests/errors/profile-not-found') {
                 return null;
@@ -25,7 +25,7 @@ class profileService {
             return profile.data;
         }
         catch (error) {
-            console.error('Error fetching profile layout', error);
+            console.log('Error fetching profile layout', error);
             throw new Error("Could not fetch profile layout");
         }
     }
@@ -36,7 +36,7 @@ class profileService {
             return profile.data;
         }
         catch (error) {
-            console.error('Error creating profile', error);
+            console.log('Error creating profile', error);
             throw new Error("Could not create profile");
         }
     }
@@ -62,7 +62,7 @@ class profileService {
             return profile.data;
         }
         catch (error) {
-            console.error('Error updating profile', error);
+            console.log('Error updating profile', error);
             throw new Error("Could not update profile");
         }
     }
@@ -93,8 +93,14 @@ class profileService {
     }
 
     static getProfiles = async () => {
-        const { data: profileData } = await pAxios.get(`${this.host}/date/profiles`);
-        return profileData.data;
+        try {
+            const { data: profileData } = await pAxios.get(`${this.host}/date/profiles`);
+            return profileData.data;
+        }
+        catch (error) {
+            console.log('Error fetching profiles', error);
+            return null;
+        }
     }
 }
 

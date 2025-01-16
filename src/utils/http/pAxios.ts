@@ -26,7 +26,7 @@ pAxios.interceptors.request.use(
           } as AxiosRequestConfig['headers'];
         }
       } catch (error) {
-        console.error('Failed to get Firebase token:', error);
+        console.log('Failed to get Firebase token:', error);
       }
     }
 

@@ -19,10 +19,10 @@ const DistanceStepper = ({
   step: number;
   initialValue?: number;
 }) => {
-  const [distance, setDistance] = useState(initialValue || min);
+  const [distance, setDistance] = useState((initialValue || min) > 0 ? initialValue || min : undefined);
 
   useEffect(() => {
-    setDistance(initialValue || min);
+    setDistance((initialValue || min) > 0 ? initialValue || min : undefined);
   }, [initialValue]);
 
   const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -22,6 +22,9 @@ const PromptCard = ({id, selectedPromptId, answer, prompts, promptPlaceholder, s
     useEffect(() => {
         setLocalSelectedPromptId(selectedPromptId);
     }, [selectedPromptId]);
+    useEffect(() => {
+        setLocalPromptAnswer(answer);
+    }, [answer]);
     return (
        <Modal triggerElement={
         <div className="w-full flex flex-col gap-5 rounded-lg border-2 border-overBackgroundOutline p-5">
@@ -41,10 +44,10 @@ const PromptCard = ({id, selectedPromptId, answer, prompts, promptPlaceholder, s
        }
        body={
         <div>
-            <Select id={id} value={selectedPromptId} options={prompts.map((p) => ({
+            <Select id={id} value={localSelectedPromptId} options={prompts.map((p) => ({
                 id: p.id, label: p.label, value: p.id
             }))} onChange={(ele: ChangeEvent<HTMLSelectElement>) => setLocalSelectedPromptId(ele.currentTarget.value)} dummySelectLabel="Select a prompt"/>
-            <textarea className="w-full p-5 outline-none resize-none border-2 border-overBackgroundOutline rounded-lg" value={localPromptAnswer} onChange={(e) => localSelectedPromptId ? setLocalPromptAnswer(e.target.value) : (() => {})()}/>
+            <textarea className="w-full p-5 bg-transparent outline-none resize-none border-2 border-overBackgroundOutline rounded-lg" value={localPromptAnswer} onChange={(e) => localSelectedPromptId ? setLocalPromptAnswer(e.target.value) : (() => {})()}/>
         </div>
        }
        title="Prompt"

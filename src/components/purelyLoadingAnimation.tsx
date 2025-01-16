@@ -21,7 +21,7 @@ const PurelyLoader = ({
           setAnimationData(data);
         })
         .catch((error) => {
-          console.error('Error loading Lottie animation:', error);
+          console.log('Error loading Lottie animation:', error);
         });
     }, []);
     

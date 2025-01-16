@@ -24,7 +24,7 @@ export const ScreenLoaderProvider: React.FC<ScreenLoaderProviderProps> = ({ chil
         setAnimationData(data);
       })
       .catch((error) => {
-        console.error('Error loading Lottie animation:', error);
+        console.log('Error loading Lottie animation:', error);
       });
   }, []);
   

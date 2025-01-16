@@ -5,6 +5,7 @@ import firebaseConfig from '@/utils/helpers/firebase/config';
 import { FirebaseApp, initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { usePathname, useRouter } from 'next/navigation';
+import PurelyLoader from '../purelyLoadingAnimation';
 
 interface FirebaseAppProviderContextType {
   app: FirebaseApp | undefined;
@@ -20,7 +21,7 @@ export const FirebaseAppProvider: React.FC<FirebaseAppProviderContext> = ({ chil
   const [app, setApp] = useState<FirebaseApp>();
   const navigator = useRouter();
   const usePath = usePathname();
-
+  const [isInitialized, setIsInitialized] = useState(false);
   useEffect(() => {
     const firebaseApp = initializeApp(firebaseConfig);
     setApp(firebaseApp);
@@ -35,7 +36,7 @@ export const FirebaseAppProvider: React.FC<FirebaseAppProviderContext> = ({ chil
         navigator.replace('/auth/signin');
       }
     });
-  
+    setIsInitialized(true);
     // Cleanup subscription on unmount
     return () => unsubscribe();
   }, []);
@@ -47,10 +48,11 @@ export const FirebaseAppProvider: React.FC<FirebaseAppProviderContext> = ({ chil
   }, [app, navigator]);
   
   return (
-    <FirebaseAppProviderContext.Provider value={{app}}>
+    <FirebaseAppProviderContext.Provider value={{ app }}>
       {children}
     </FirebaseAppProviderContext.Provider>
   );
+  
 };
 
 export const useFirebaseApp = (): FirebaseAppProviderContextType => {
