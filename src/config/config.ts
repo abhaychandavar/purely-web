@@ -7,6 +7,9 @@ const appConfig = {
         },
         profiles: {
             baseUrl: process.env.NEXT_PUBLIC_PROFILES_SERVICE_URL || 'http://localhost:8081',
+        },
+        media: {
+            baseUrl: process.env.NEXT_PUBLIC_MEDIA_SERVICE_URL || 'http://localhost:8082',
         }
     },
     google: {

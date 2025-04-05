@@ -20,6 +20,7 @@ const PromptCard = ({id, selectedPromptId, answer, prompts, promptPlaceholder, s
     const [localPromptAnswer, setLocalPromptAnswer] = useState(answer);
     const [localSelectedPromptId, setLocalSelectedPromptId] = useState(selectedPromptId);
     useEffect(() => {
+        console.log('localSelectedPromptId >>', localSelectedPromptId)
         setLocalSelectedPromptId(selectedPromptId);
     }, [selectedPromptId]);
     useEffect(() => {
@@ -54,6 +55,7 @@ const PromptCard = ({id, selectedPromptId, answer, prompts, promptPlaceholder, s
        onAffirmation={() => {
         if (localPromptAnswer && localSelectedPromptId) {
             setPromptAnswer(localPromptAnswer, localSelectedPromptId)
+            setSelectedPrompt(localSelectedPromptId)
             setLocalSelectedPromptId(localSelectedPromptId)
         }
        }}

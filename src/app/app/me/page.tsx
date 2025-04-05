@@ -7,12 +7,24 @@ import ErrorMessage from "@/components/error/errorText";
 import SearchableSelect from "../../app/me/profileCard/searchableSelect";
 import Select from "@/components/select/select";
 import PromptCard from "../../app/me/profileCard/promptCard";
-import ImageLayout from "../../app/me/profileCard/imageLayout";
+import ImageLayout from "./profileCard/imageLayout/imageLayout";
 import useDebounce from "@/components/hooks/useDebounce";
 import LocationSearch from "@/components/location/locationSearch";
 import DistanceStepper from "@/components/distanceStepperSlider";
 
 const UpsertProfile = () => {
+    const [distanceStepperStep, setDistanceStepperStep] = useState(5);
+
+    useEffect(() => {
+    const updateStep = () => {
+        setDistanceStepperStep(window.innerWidth <= 768 ? 10 : 5);
+    };
+
+    updateStep();
+    window.addEventListener("resize", updateStep);
+    return () => window.removeEventListener("resize", updateStep);
+    }, []);
+
     const [isLoading, setIsLoading] = useState(false);
     const [profile, setProfile] = useState<Record<string, any>>({});
     const [name, setName] = useState((profile["name"] || '').length ? profile["name"] : undefined);
@@ -52,7 +64,31 @@ const UpsertProfile = () => {
 
     const fetchProfile = async () => {
         const currentProfile = await profileService.getSelfProfile();
+        const { prompts } = currentProfile;
+        const promptList: Record<string, any>[] = [];
+        for (const promptData of prompts || []) {
+            promptList.push({
+                id: promptData.prompt,
+                answer: promptData.answer,
+                isUsed: true,
+            });
+        }
+        currentProfile.prompts = promptList;
         setProfile(currentProfile);
+    }
+
+    const handleImageLayoutChange = (mediaList: Array<{
+        mediaID: string,
+        label: string,
+        mediaURL?: string,
+        id: string,
+        order: number,
+    }>) => {
+        setProfile((prevProfile) => ({ ...prevProfile, media: mediaList.map((media, idx) => ({
+            mediaID: media.mediaID,
+            order: media.order || idx,
+            mediaURL: media.mediaURL,
+        })).filter((img: any) => img?.mediaURL) }));
     }
 
     const debouncedSetProfile = useDebounce((key: string, value: any) => {
@@ -110,19 +146,11 @@ const UpsertProfile = () => {
                         <ErrorMessage message={''} />
                     </div>
                     <SearchableSelect id="" options={genders}
-                        defaultOptionIds={[
-                            genders?.[0]?.id,
-                            genders?.[1]?.id
-                        ]}
                         defaultId={profile['gender']}
                         title="I am"
                         onChange={(id) => setProfile({ ...profile, gender: id })}
                     />
                     <SearchableSelect id="lookingFor" options={genders}
-                        defaultOptionIds={[
-                            genders?.[0]?.id,
-                            genders?.[1]?.id
-                        ]}
                         defaultId={profile['lookingFor']}
                         title="I am looking for a" 
                         onChange={(id) => setProfile({ ...profile, lookingFor: id })}
@@ -160,7 +188,6 @@ const UpsertProfile = () => {
                                 const selectedPrompts = profile.prompts || [];
                                 const selectedPrompt = selectedPrompts[index] || {}; 
                                 const selectedPromptIds = selectedPrompts.map((pt: any) => pt?.id);
-
                                 const availablePrompts = prompts.filter(
                                     (p) =>
                                         !selectedPromptIds.includes(p?.id) || 
@@ -204,14 +231,34 @@ const UpsertProfile = () => {
 
                     </div>
                     <div>
-                        <ImageLayout count={4} title="Pictures" />
+                        <ImageLayout items={(() => {
+                            const allItems = profile?.media?.sort((a: Record<string, any>, b: Record<string, any>) => a.order - b.order)?.map((item: Record<string, any>, index: number) => ({
+                                mediaID: item.mediaID,
+                                order: index + 1,
+                                mediaURL: item.mediaURL,
+                            })) || Array.from({ length: 4 }, (_, index) => ({
+                                mediaID: `image-${index}`,
+                                order: index + 1,
+                                label: `Click to upload image ${index + 1}`,
+                                mediaURL: undefined
+                            }))
+                            if (allItems.length < 4) {
+                                return allItems.concat(Array.from({ length: 4 - allItems.length }, (_, index) => ({
+                                    mediaID: `image-${index + 1}`,
+                                    order: index + 1 + allItems.length,
+                                    label: `Click to upload image ${index + 1 + allItems.length}`,
+                                    mediaURL: undefined
+                                })))
+                            }
+                            return allItems;
+                        })()} title="Pictures" handleChange={handleImageLayoutChange} />
                     </div>
                     <LocationSearch title="Help us find matches nearest to you" handleLocationSelect={(locationLabel: string, lat: number, lng: number) => {
                             setProfile({...profile, location: {lat, lng }, locationLabel: locationLabel });
                         }}
                         locationLabel={profile?.["locationLabel"]}
                     />
-                    <DistanceStepper initialValue={profile['preferredMatchDistance'] || 10} min={10} max={80} label={`Select distance you want us to look for matches in kms`} unit="Kms" step={5} onChange={(distance: number) => debouncedSetProfile('preferredMatchDistance', distance)}/>
+                    <DistanceStepper initialValue={profile['preferredMatchDistance'] || 10} min={10} max={80} label={`Select distance you want us to look for matches in kms`} unit="Kms" step={distanceStepperStep} onChange={(distance: number) => debouncedSetProfile('preferredMatchDistance', distance)}/>
                 </div>
             )}
         </main>

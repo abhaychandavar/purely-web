@@ -2,7 +2,7 @@
 
 import ErrorMessage from "@/components/error/errorText";
 import Modal from "@/components/modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const SearchableSelect = ({
     id,
@@ -25,6 +25,9 @@ const SearchableSelect = ({
         const { id } = option
         await onChange(id);
     }
+    useEffect(() => {
+        console.log('DEFAULT_ID', defaultId, options);
+    }, [defaultId, options])
     return (
         <div className='flex flex-col gap-5 w-full' id={id} key={id}>
                 <label className="block font-medium">
@@ -99,7 +102,7 @@ const SearchableSelect = ({
                             :
                             options?.map((option, idx) => {
                                 return (
-                                    <div key={idx + "opt-list"} id={option.id} className={`p-5 flex justify-center items-center bg-secondary hover:bg-primary ${option?.secondary ? 'bg-tertiary' : 'bg-secondary'}`}>
+                                    <div onClick={() => handleSelect(option)} key={idx + "opt-list"} id={option.id} className={`flex flex-row justify-center items-center rounded-full gap-5 pt-2 pb-2 md:pb-5 md:pt-5 p-5 cursor-pointer transition-all border-b-2 border-overBackgroundOutline hover:bg-highlight ${defaultId === option?.id ? 'bg-primary' : 'bg-secondary'} outline-none border-none`}>
                                         {
                                             option.label
                                         }

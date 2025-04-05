@@ -13,7 +13,7 @@ const NavPanel = ({ className }: { className?: string }) => {
         console.log('Path name', pathName);
     }, [])
     return (
-        <div className={`min-h-screen flex flex-col justify-between ${className || ''} fixed top-0`}>
+        <div className={`z-10 min-w-full lg:min-w-fit bottom-0 lg:min-h-screen flex flex-row lg:flex-col justify-center lg:justify-between fixed lg:top-0 bg-card lg:bg-transparent ${className || ''}`}>
             <NavCard icon={
                     <Image
                         src="/purely.svg"
@@ -25,9 +25,10 @@ const NavPanel = ({ className }: { className?: string }) => {
                 }
                 href="/"
                 isActive={pathName === '/'}
+                className="hidden lg:flex"
             />
 
-            <div className="w-full flex flex-col">
+            <div className="w-full flex flex-row justify-around lg:flex-col">
                 <NavCard 
                     icon={
                         <Image

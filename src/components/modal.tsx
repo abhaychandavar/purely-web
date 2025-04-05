@@ -10,9 +10,11 @@ const Modal = ({
     onClose,
     open,
     modalControls = true,
-    onOpen
+    onOpen,
+    closeControl = true,
+    affirmationControl = true
 }: {
-    triggerElement: React.ReactNode;
+    triggerElement?: React.ReactNode;
     title: string;
     body?: React.ReactNode;
     onAffirmation?: () => void;
@@ -22,6 +24,8 @@ const Modal = ({
     modalControls?: boolean;
     open?: boolean;
     onOpen?: () => void;
+    closeControl?: boolean;
+    affirmationControl?: boolean;
 }) => {
     const [isOpen, setIsOpen] = useState<boolean>(open ?? false);
 
@@ -51,9 +55,11 @@ const Modal = ({
     return (
         <div className="w-full">
             {/* Trigger element to open the modal */}
-            <div onClick={handleOpen} className="cursor-pointer">
-                {triggerElement}
-            </div>
+            {
+                triggerElement ? <div onClick={handleOpen} className="cursor-pointer">
+                    {triggerElement}
+                </div> : <></>
+            }
 
             {/* Modal */}
             {isOpen && (
@@ -70,18 +76,18 @@ const Modal = ({
                         <div>{body}</div>
                         {modalControls && (
                             <div className="flex flex-row justify-end gap-2 w-full">
-                                <button
+                                {closeControl && <button
                                     className="bg-secondary p-2 pl-5 pr-5 rounded-full"
                                     onClick={handleClose}
                                 >
                                     {cancelText}
-                                </button>
-                                <button
+                                </button>}
+                                {affirmationControl && <button
                                     className="bg-primary p-2 pl-5 pr-5 rounded-full"
                                     onClick={handleAffirmation}
                                 >
                                     {affirmationText}
-                                </button>
+                                </button>}
                             </div>
                         )}
                     </div>
