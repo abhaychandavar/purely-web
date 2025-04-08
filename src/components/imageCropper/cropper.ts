@@ -96,7 +96,7 @@ export const createImage = (url: string): any =>
     return new Promise((resolve, reject) => {
         croppedCanvas.toBlob((blob: Blob | null) => {
           if (blob) {
-            const file = new File([blob], 'cropped-image.jpg', { 
+            const file = new File([blob], 'img.jpg', { 
               type: 'image/jpeg',
               lastModified: Date.now()
             });
