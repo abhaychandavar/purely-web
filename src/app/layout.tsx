@@ -44,7 +44,7 @@ export default function RootLayout({
       <meta name="theme-color" content={'#00A98D'} />
       <FirebaseAppProvider>
         <body
-          className={`${poppins.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}
+          className={`${poppins.variable} ${geistSans.variable} ${geistMono.variable} antialiased min-h-screen min-w-screen h-screen w-screen`}
         >
           <ThemeProvider attribute="class"
             defaultTheme="system">

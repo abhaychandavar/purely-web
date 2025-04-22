@@ -42,7 +42,7 @@ const PrimaryButton = ({
             id={id}
             type='submit'
             onClick={(isLoading || isDisabled) ? () => {} : handleClick}
-            className={`flex justify-center items-center bg-primary rounded-full p-2 md:p-5 text-overBackground cursor-pointer transition-all transform ${
+            className={`flex justify-center items-center bg-primary rounded-full p-2 md:p-5 text-background cursor-pointer transition-all transform ${
                 isPressed ? 'scale-95' : 'scale-100'
             } ${className}`}
         >

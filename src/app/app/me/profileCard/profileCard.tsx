@@ -335,7 +335,6 @@ const ProfileCard = ({ layoutData, continueButtonText, handleContinue, handleBac
     };
 
     const validateProfileData = (data: Record<string, any>, layoutInfo: Record<string, any>) => {
-        console.log('data', data)
         for (const key in layoutInfo) {
             if (layoutInfo[key]?.required && !data[key]) {
                 console.log('errorData', { ...errorData, [key]: 'This field is required' });
@@ -346,13 +345,11 @@ const ProfileCard = ({ layoutData, continueButtonText, handleContinue, handleBac
         }
     }
     const handleContinueClicked = async () => {
-        console.log(profileData);
         await profileService.upsertProfile({
             data: profileData,
             purpose: 'date'
         });
         validateProfileData(profileData, layoutValidationInfo);
-        // handleContinue();
     }
 
     return (<AnimatePresence mode='wait'>

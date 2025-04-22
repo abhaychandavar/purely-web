@@ -6,14 +6,14 @@ import { useTheme } from "next-themes";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
-const NavPanel = ({ className }: { className?: string }) => {
+const NavPanel = ({ className, ref }: { className?: string, ref?: any }) => {
     const themeData = useTheme();
     const pathName = usePathname();
     useEffect(() => {
         console.log('Path name', pathName);
     }, [])
     return (
-        <div className={`z-10 min-w-full lg:min-w-fit bottom-0 lg:min-h-screen flex flex-row lg:flex-col justify-center lg:justify-between fixed lg:top-0 bg-card lg:bg-transparent ${className || ''}`}>
+        <div ref={ref} id="navBar" className={`z-10 min-w-full lg:min-w-fit bottom-0 lg:min-h-screen flex flex-row lg:flex-col justify-center lg:justify-between fixed lg:top-0 bg-card lg:bg-transparent ${className || ''}`}>
             <NavCard icon={
                     <Image
                         src="/purely.svg"

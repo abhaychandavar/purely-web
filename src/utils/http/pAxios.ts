@@ -20,6 +20,7 @@ pAxios.interceptors.request.use(
         if (user) {
           // Get the Firebase ID token
           const token = await user.getIdToken();
+          console.log('ACCESS_TOKEN <><><><>', token)
           config.headers = {
             ...config.headers,
             Authorization: `Bearer ${token}`,

@@ -16,22 +16,29 @@ const CircularSecondaryButton = ({
     const handleClick = () => {
         setIsPressed(true);
         onClick();
-        // Reset the pressed state after the animation ends (300ms in this case)
         setTimeout(() => {
             setIsPressed(false);
         }, 300);
     };
 
     return (
-        <div
+        <button
             onClick={handleClick}
-            className={`flex aspect-square justify-center items-center bg-secondary rounded-full text-overBackground cursor-pointer transition-all transform ${isPressed ? 'scale-95' : 'scale-100'
-                } ${className}`}
-            style={{ padding: '0.5rem' }}
+            className={`
+                w-14 h-14
+                min-w-14 min-h-14
+                max-w-14 max-h-14
+                inline-flex justify-center items-center 
+                bg-secondary text-overBackground 
+                rounded-full 
+                cursor-pointer 
+                transition-transform 
+                ${isPressed ? 'scale-95' : 'scale-100'} 
+                ${className}
+            `}
         >
             {subElement}
-        </div>
-
+        </button>
     );
 };
 

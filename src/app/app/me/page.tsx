@@ -174,7 +174,7 @@ const UpsertProfile = () => {
                         onChange={(e) => e?.target?.value ? ['relationship', 'notSureYet'].includes(e?.target?.value) && setProfile({ ...profile, hereFor: e.target.value }) : (() => {})()}
                         dummySelectLabel="Select one and let us know"
                     />
-                    <div className="w-full flex flex-col gap-5 bg-re">
+                    <div className="w-full flex flex-col gap-5">
                         <label htmlFor="bio">
                             Bio
                         </label>
